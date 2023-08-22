@@ -27,6 +27,9 @@ export class UserService {
         return prismaClient.user.findUnique({ where: {email}});
     }
 
+    static getUserById(id: string) {
+        return prismaClient.user.findUnique({ where: {id}})
+    }
     static createUser(payload: CreateUserInterface) {
         const { firstName, lastName, email, password } = payload;
         const salt = randomBytes(32).toString("hex");
@@ -48,8 +51,12 @@ export class UserService {
         const userHashPassword = UserService.generateHash(user.salt, password); 
 
         if (userHashPassword !== user.password) throw new Error("incorrect passowrd");
-        const token = Jwt.sign({email: user.email, id: user.email}, JWT_SECRET);
+        const token = Jwt.sign({email: user.email, id: user.id}, JWT_SECRET);
         return token;
 
+    }
+
+    static decodeToken(token: string) {
+        return Jwt.verify(token, JWT_SECRET);
     }
 }
