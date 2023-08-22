@@ -1,1 +1,8 @@
-export const typeDef = `#graphql`;
+export const typeDef = `#graphql
+    type User {
+        id: ID!
+        firstName: String!
+        lastName: String
+        email: String
+    }
+`;
